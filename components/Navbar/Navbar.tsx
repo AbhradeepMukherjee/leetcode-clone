@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSetRecoilState } from 'recoil';
-import { authModalState } from '@/atoms/AuthModalAtom';
+import { authModalState } from "@/atoms/AuthModalAtom";
 type NavbarProps = {
     
 };

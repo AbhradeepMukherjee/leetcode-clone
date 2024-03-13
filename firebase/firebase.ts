@@ -1,16 +1,18 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
-  apiKey: "AIzaSyCKTJoGWLuc0ijqvmBxVZdm4_iokbhl6V4",
-  authDomain: "leetcode-clone-95ad8-1b127.firebaseapp.com",
-  projectId: "leetcode-clone-95ad8",
-  storageBucket: "leetcode-clone-95ad8.appspot.com",
-  messagingSenderId: "141109182469",
-  appId: "1:141109182469:web:73e8463e83ff01d04a5c6c"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID
 };
 
-const app = initializeApp(firebaseConfig);
+const app = !getApps.length ? initializeApp(firebaseConfig) : getApp();
 
 const auth = getAuth(app); 
 const firestore = getFirestore(app);
+
+export {auth, firestore, app};
