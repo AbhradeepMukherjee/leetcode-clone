@@ -9,7 +9,7 @@ const ProblemPage = async ({ params }: { params: { pid: string } }) => {
 	console.log(problem?.id);
 
     return <div>
-        <Workspace />
+        <Workspace problem={problem}/>
     </div>;
 }
 export default ProblemPage;

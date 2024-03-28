@@ -5,7 +5,7 @@ import { TiStarOutline } from "react-icons/ti";
 
 
 
-const ProblemDescription= () => {
+const ProblemDescription= ({problem}: {problem: Problem}) => {
 	
 	return (
 		<div className='bg-dark-layer-1'>
@@ -21,7 +21,7 @@ const ProblemDescription= () => {
 					
 					<div className='w-full'>
 						<div className='flex space-x-4'>
-							<div className='flex-1 mr-2 text-lg text-white font-medium'></div>
+							<div className='flex-1 mr-2 text-lg text-white font-medium'>{problem.title}</div>
 						</div>
 						<div className='flex items-center mt-3'>
 							<div
