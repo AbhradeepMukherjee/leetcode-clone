@@ -8,9 +8,10 @@ import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { BsList } from "react-icons/bs";
-import { useRouter } from "next/navigation";
-import { problems } from "@/mockProblems/problems";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { problems } from "@/utils/problems";
 import Timer from "../Timer/Page";
+import { Problem } from "@/utils/types/problem";
 type TopbarProps = {
   problemPage?: boolean;
 };
@@ -19,27 +20,28 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
-
+  const pathname = usePathname();
   const router = useRouter();
+  console.log(pathname.split("/")[2]);
 
-	// const handleProblemChange = (isForward: boolean) => {
-	// 	const { order } = problems[router.query.pid as string] as Problem;
-	// 	const direction = isForward ? 1 : -1;
-	// 	const nextProblemOrder = order + direction;
-	// 	const nextProblemKey = Object.keys(problems).find((key) => problems[key].order === nextProblemOrder);
+	const handleProblemChange = (isForward: boolean) => {
+		const { order } = problems[pathname.split("/")[2] as string] as Problem;
+		const direction = isForward ? 1 : -1;
+		const nextProblemOrder = order + direction;
+		const nextProblemKey = Object.keys(problems).find((key) => problems[key].order === nextProblemOrder);
 
-	// 	if (isForward && !nextProblemKey) {
-	// 		const firstProblemKey = Object.keys(problems).find((key) => problems[key].order === 1);
-	// 		router.push(`/problems/${firstProblemKey}`);
-	// 	} else if (!isForward && !nextProblemKey) {
-	// 		const lastProblemKey = Object.keys(problems).find(
-	// 			(key) => problems[key].order === Object.keys(problems).length
-	// 		);
-	// 		router.push(`/problems/${lastProblemKey}`);
-	// 	} else {
-	// 		router.push(`/problems/${nextProblemKey}`);
-	// 	}
-	// };
+		if (isForward && !nextProblemKey) {
+			const firstProblemKey = Object.keys(problems).find((key) => problems[key].order === 1);
+			router.push(`/problems/${firstProblemKey}`);
+		} else if (!isForward && !nextProblemKey) {
+			const lastProblemKey = Object.keys(problems).find(
+				(key) => problems[key].order === Object.keys(problems).length
+			);
+			router.push(`/problems/${lastProblemKey}`);
+		} else {
+			router.push(`/problems/${nextProblemKey}`);
+		}
+	};
 
   return (
     <nav className="relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
@@ -54,7 +56,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
 					<div className='flex items-center gap-4 flex-1 justify-center'>
 						<div
 							className='flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
-							// onClick={() => handleProblemChange(false)}
+							onClick={() => handleProblemChange(false)}
 						>
 							<FaChevronLeft />
 						</div>
@@ -69,7 +71,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
 						</Link>
 						<div
 							className='flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
-							// onClick={() => handleProblemChange(true)}
+							onClick={() => handleProblemChange(true)}
 						>
 							<FaChevronRight /> 
 						</div>
