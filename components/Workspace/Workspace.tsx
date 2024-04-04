@@ -17,7 +17,7 @@ const Workspace= ({problem}: {problem: Problem}) => {
 		<Split className='split' minSize={0}>
 			{/* <ProblemDescription problem={problems} _solved={solved} /> */}<ProblemDescription problem={problem}/>
 			<div className='bg-dark-fill-2'>
-				{/* <Playground problem={problem} setSuccess={setSuccess} setSolved={setSolved} /> */}<Playground />
+				{/* <Playground problem={problem} setSuccess={setSuccess} setSolved={setSolved} /> */}<Playground problem={problem}/>
 				{/* {success && <Confetti gravity={0.3} tweenDuration={4000} width={width - 1} height={height - 1} />} */}
 			</div>
 		</Split>

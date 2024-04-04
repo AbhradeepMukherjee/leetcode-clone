@@ -71,7 +71,7 @@ const Topbar: React.FC<TopbarProps> = ({problemPage}) => {
 							className='flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
 							// onClick={() => handleProblemChange(true)}
 						>
-							<FaChevronRight />
+							<FaChevronRight /> 
 						</div>
 					</div>
 				)}

@@ -1,33 +1,41 @@
-"use client"
+"use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillYoutube } from "react-icons/ai";
 import { BsCheckCircle } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
-import { problems } from "@/mockProblems/Problems";
 import YouTube from "react-youtube";
-type ProblemsTableProps = {};
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { firestore } from "@/firebase/firebase";
+import { DBProblem } from "@/utils/types/problem";
+type ProblemsTableProps = {
+  setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const ProblemsTable: React.FC<ProblemsTableProps> = () => {
-    const [youtubePlayer, setYoutubePlayer] = useState({
-		isOpen: false,
-		videoId: "",
-	});
-    const closeModal = () => {
-        setYoutubePlayer({
-            isOpen: false,
-            videoId: "",
-          })
+const ProblemsTable: React.FC<ProblemsTableProps> = ({
+  setLoadingProblems,
+}) => {
+  const [youtubePlayer, setYoutubePlayer] = useState({
+    isOpen: false,
+    videoId: "",
+  });
+
+  const problems = useGetProblems(setLoadingProblems);
+
+  const closeModal = () => {
+    setYoutubePlayer({
+      isOpen: false,
+      videoId: "",
+    });
+  };
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeModal();
     };
-    useEffect(() => {
-		const handleEsc = (e: KeyboardEvent) => {
-			if (e.key === "Escape") closeModal();
-		};
-		window.addEventListener("keydown", handleEsc);
+    window.addEventListener("keydown", handleEsc);
 
-		return () => window.removeEventListener("keydown", handleEsc);
-	}, []);
-
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   return (
     <>
@@ -114,8 +122,32 @@ const ProblemsTable: React.FC<ProblemsTableProps> = () => {
             </div>
           </div>
         </tfoot>
-       )}
+      )}
     </>
   );
 };
 export default ProblemsTable;
+
+function useGetProblems(
+  setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  const [problems, setProblems] = useState<DBProblem[]>([]);
+  useEffect(() => {
+    const getProblems = async () => {
+      setLoadingProblems(true);
+      const q = query(
+        collection(firestore, "problems"),
+        orderBy("order", "asc")
+      );
+      const querySnapShot = await getDocs(q);
+      const tmp:DBProblem[] = [];
+      querySnapShot.forEach((doc) => {
+        tmp.push({ id: doc.id, ...doc.data() } as DBProblem);
+      });
+      setProblems(tmp);
+      setLoadingProblems(false);
+    };
+    getProblems();
+  }, [setLoadingProblems]);
+  return problems;
+}
