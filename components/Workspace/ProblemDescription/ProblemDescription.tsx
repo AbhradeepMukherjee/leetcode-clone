@@ -22,7 +22,7 @@ import { BsCheck2Circle } from "react-icons/bs";
 import { TiStarOutline } from "react-icons/ti";
 import { toast } from "react-toastify";
 
-const ProblemDescription = ({ problem }: { problem: Problem }) => {
+const ProblemDescription = ({ problem, _solved }: { problem: Problem, _solved: boolean } ) => {
   const [user] = useAuthState(auth);
   const { problemDifficultyClass, loading, currentProblem, setCurrentProblem } =
     useGetCurrentProblem(problem.id);
@@ -212,11 +212,11 @@ const ProblemDescription = ({ problem }: { problem: Problem }) => {
             {!loading && currentProblem && (
               <div className="flex items-center mt-3">
                 <div
-                  className={`text-olive bg-olive inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
+                  className={`${problemDifficultyClass} inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
                 >
                   {currentProblem.difficulty}
                 </div>
-                {solved && (
+                {(solved || _solved) && (
                   <div className="rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s">
                     <BsCheck2Circle />
                   </div>
@@ -281,7 +281,7 @@ const ProblemDescription = ({ problem }: { problem: Problem }) => {
             <div className="mt-4">
               {problem.examples.map((example, index) => {
                 return (
-                  <div>
+                  <div key={index}>
                     <p className="font-medium text-white ">
                       Example {index + 1}:{" "}
                     </p>
